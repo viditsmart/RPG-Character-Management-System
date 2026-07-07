@@ -21,6 +21,7 @@ public:
     int getExperiencePoints() const;
     void setStatus(const std::string &s);
     std::string getStatus() const;
+    ~Character();
 
 private:
     // Private members
