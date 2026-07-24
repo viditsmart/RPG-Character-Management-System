@@ -2,7 +2,13 @@
 
 Character::Character()
 {
-
+    name = "Unknown";
+    level = 1;
+    health = 50;
+    attack_power = 20;
+    defense = 10;
+    experience_points = 0;
+    status = "Alive";
 }
 
 void Character::setName(const std::string &n)
