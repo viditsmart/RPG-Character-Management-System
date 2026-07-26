@@ -1,11 +1,20 @@
 #include <iostream>
 
 //using namespace std;
+void displayMenu();
 
 int main()
 {
     int option;
-    
+    displayMenu();
+    std::cin >> option;
+
+
+    return 0;
+}
+
+void displayMenu()
+{
     std::cout << "=========================" << std::endl;
     std::cout << "RPG CHARACTER MANAGER" << std::endl;
     std::cout << "=========================" << std::endl << std::endl;
@@ -20,8 +29,4 @@ int main()
     std::cout << "8. Load Game" << std::endl;
     std::cout << "9. Exit" << std::endl << std::endl;
     std::cout << "Enter your choice: ";
-    std::cin >> option;
-
-
-    return 0;
 }
