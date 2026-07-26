@@ -1,14 +1,22 @@
 #include <iostream>
+#include <string>
 
 //using namespace std;
 void displayMenu();
+void createCharacter();
 
 int main()
 {
     int option;
     displayMenu();
     std::cin >> option;
+    switch(option)
+    {
+        case 1: 
+        {
 
+        }
+    }
 
     return 0;
 }
@@ -29,4 +37,18 @@ void displayMenu()
     std::cout << "8. Load Game" << std::endl;
     std::cout << "9. Exit" << std::endl << std::endl;
     std::cout << "Enter your choice: ";
+}
+
+void createCharacter()
+{
+    int charOption;
+    std::cout << "Choose the type of character to create: " << std::endl;
+    std::cout << "1. Knight" << std::endl;
+    std::cout << "2. Mage" << std::endl;
+    std::cout << "3. Doctor" << std::endl;
+    std::cin >> charOption;
+    std::string name;
+    std::cout << "Enter character name: ";
+    getline(std::cin, name);
+
 }
