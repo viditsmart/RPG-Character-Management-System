@@ -7,8 +7,10 @@ class Doctor : public Character
 {
 public:
     Doctor();
-    void Heal();
+    int Heal();
     ~Doctor();
+private:
+
 };
 
 #endif 

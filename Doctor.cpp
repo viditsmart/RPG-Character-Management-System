@@ -3,10 +3,12 @@
 
 Doctor::Doctor()
 {
-    
+
 }
 
-void Doctor::Heal()
+int Doctor::Heal()
 {
-    
+   int hp = Character::getHealth();
+   hp+=30;
+   return hp;
 }
