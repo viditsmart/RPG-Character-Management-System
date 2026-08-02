@@ -10,12 +10,23 @@ int main()
     int option;
     displayMenu();
     std::cin >> option;
-    switch(option)
+    while (option != 9)
     {
-        case 1: 
+        switch(option)
         {
-
+            case 1: 
+            {
+                createCharacter();
+                break; 
+            }
+            case 2: 
+            {
+                // View Characters
+                break; 
+            }
         }
+        displayMenu();
+        std::cin >> option;
     }
 
     return 0;
