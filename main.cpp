@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include "Character.h"
+#include "Doctor.h"
 
 //using namespace std;
 void displayMenu();
@@ -7,6 +9,7 @@ void createCharacter();
 
 int main()
 {
+    Character* character = nullptr; // Pointer to hold the created character
     int option;
     displayMenu();
     std::cin >> option;
