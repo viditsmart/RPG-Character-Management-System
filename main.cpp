@@ -142,3 +142,16 @@ void createCharacter(Character *chars)
     }
 
 }
+
+void viewCharacters(Character *chars)
+{
+    std::cout << "List of Characters: " << std::endl;
+    for (int i = 0; i < MAX; i++)
+    {
+        if (!chars[i].getName().empty())
+        {
+            std::cout << "Character " << i + 1 << ": " << chars[i].getName() << std::endl;
+            std::cout << "Level: " << chars[i].getLevel() << std::endl;
+        }
+    }
+}
