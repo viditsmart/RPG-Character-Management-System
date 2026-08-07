@@ -2,15 +2,19 @@
 #include <string>
 #include "Character.h"
 #include "Doctor.h"
+#include "Knight.h"
+#include "Mage.h"
 
 //using namespace std;
 void displayMenu();
-void createCharacter();
+void createCharacter(Character *chars);
+const int MAX = 30;
 
 int main()
 {
-    Character* character = nullptr; // Pointer to hold the created character
+    Character* characters = new Character[MAX]; // Pointer to hold the created character
     int option;
+    //int i = 0;
     displayMenu();
     std::cin >> option;
     while (option != 9)
@@ -19,7 +23,7 @@ int main()
         {
             case 1: 
             {
-                createCharacter();
+                createCharacter(characters);
                 break; 
             }
             case 2: 
@@ -53,16 +57,50 @@ void displayMenu()
     std::cout << "Enter your choice: ";
 }
 
-void createCharacter()
+void createCharacter(Character *chars)
 {
-    int charOption;
-    std::cout << "Choose the type of character to create: " << std::endl;
-    std::cout << "1. Knight" << std::endl;
-    std::cout << "2. Mage" << std::endl;
-    std::cout << "3. Doctor" << std::endl;
-    std::cin >> charOption;
-    std::string name;
-    std::cout << "Enter character name: ";
-    getline(std::cin, name);
+    static int index = 0;
+    if (index >= MAX)
+    {
+        std::cout << "Maximum number of characters reached." << std::endl;
+
+    }
+    else
+    {
+        int charOption;
+        std::cout << "Choose the type of character to create: " << std::endl;
+        std::cout << "1. Knight" << std::endl;
+        std::cout << "2. Mage" << std::endl;
+        std::cout << "3. Doctor" << std::endl;
+        std::cin >> charOption;
+        std::string name;
+        std::cout << "Enter character name: ";
+        getline(std::cin, name);
+        if (charOption == 1)
+        {
+            Character *knight = new Knight();
+            knight->setName(name);
+            chars[index] = *knight;
+            index++;
+        }
+        else if (charOption == 2)
+        {
+            Character *mage = new Mage();
+            mage->setName(name);
+            chars[index] = *mage;
+            index++;
+        }
+        else if (charOption == 3)
+        {
+            Character *doctor = new Doctor();
+            doctor->setName(name);
+            chars[index] = *doctor;
+            index++;
+        }
+        else
+        {
+            std::cout << "Invalid option. Please try again." << std:: endl;
+        }
+    }
 
 }
