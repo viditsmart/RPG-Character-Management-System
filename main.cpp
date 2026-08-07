@@ -8,7 +8,8 @@
 //using namespace std;
 void displayMenu();
 void createCharacter(Character *chars);
-const int MAX = 30;
+void viewCharacters(Character *chars);
+const int MAX = 10;
 
 int main()
 {
@@ -29,8 +30,45 @@ int main()
             case 2: 
             {
                 // View Characters
+                viewCharacters(characters);
                 break; 
             }
+            case 3:
+            {
+                // Train Character
+                break; 
+            }
+            case 4:
+            {
+                // Battle Simulation
+                break; 
+            }
+            case 5:
+            {
+                //Heal Character
+                break;
+            }
+            case 6:
+            {
+                //Delete character
+                break;
+            }
+            case 7:
+            {
+                //Save game
+                break;
+            }
+            case 8:
+            {
+                //Load game
+                break;
+            }
+            default:
+            {
+                std::cout << "Invalid option. Please try again." << std::endl;
+                break;
+            }
+
         }
         displayMenu();
         std::cin >> option;
