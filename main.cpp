@@ -9,6 +9,7 @@
 void displayMenu();
 void createCharacter(Character *chars);
 void viewCharacters(Character *chars);
+void deleteCharacter(Character *chars);
 const int MAX = 10;
 
 int main()
@@ -51,6 +52,7 @@ int main()
             case 6:
             {
                 //Delete character
+                deleteCharacter(characters);
                 break;
             }
             case 7:
@@ -154,4 +156,23 @@ void viewCharacters(Character *chars)
             std::cout << "Level: " << chars[i].getLevel() << std::endl;
         }
     }
+}
+
+void deleteCharacter(Character *chars)
+{
+    std::cout << "Enter the index of the character to delete (1-" << MAX << "): ";
+    int index;
+    std::cin >> index;
+    if (index < 1 || index > MAX)
+    {
+        std::cout << "Invalid index. Please try again." << std::endl;
+        return;
+    }
+    if (chars[index - 1].getName().empty())
+    {
+        std::cout << "No character found at this index." << std::endl;
+        return;
+    }
+    chars[index - 1] = Character(); // Reset the character at the specified index
+    std::cout << "Character deleted successfully." << std::endl;
 }
