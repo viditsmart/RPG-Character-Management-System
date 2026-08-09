@@ -4,7 +4,7 @@ Character::Character()
 {
     name = "Unknown";
     level = 1;
-    health = 50;
+    health = 100;
     attack_power = 20;
     defense = 10;
     experience_points = 0;

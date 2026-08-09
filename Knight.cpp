@@ -5,6 +5,12 @@
 Knight::Knight()
 {
     // Initialize the knight's weapons
+    setLevel(1);
+    setHealth(750);
+    setAttackPower(38);
+    setDefense(30);
+    setExperiencePoints(0);
+    setStatus("Alive");
     Weapon sword = Weapon("Sword", 30);
     Weapon shield = Weapon("Shield", 20);
 }
