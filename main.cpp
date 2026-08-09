@@ -4,9 +4,11 @@
 #include "Doctor.h"
 #include "Knight.h"
 #include "Mage.h"
+#include <fstream>
 
 //using namespace std;
 void displayMenu();
+void saveGame(Character *chars);
 void createCharacter(Character *chars);
 void viewCharacters(Character *chars);
 void deleteCharacter(Character *chars);
@@ -58,6 +60,7 @@ int main()
             case 7:
             {
                 //Save game
+                saveGame(characters);
                 break;
             }
             case 8:
@@ -175,4 +178,34 @@ void deleteCharacter(Character *chars)
     }
     chars[index - 1] = Character(); // Reset the character at the specified index
     std::cout << "Character deleted successfully." << std::endl;
+}
+
+void saveGame(Character *chars)
+{
+    // Implement save game logic here
+    // Example: Save character data to a file
+    std::ofstream outFile("characters.txt");
+    if (!outFile)
+    {
+        std::cout << "Error opening file for writing." << std::endl;
+        return;
+    }
+    else
+    {
+        for (int i = 0; i < MAX; i++)
+        {
+            if (!chars[i].getName().empty())
+            {
+                outFile << chars[i].getName() << std::endl;
+                outFile << chars[i].getLevel() << std::endl;
+                outFile << chars[i].getHealth() << std::endl;
+                outFile << chars[i].getAttackPower() << std::endl;
+                outFile << chars[i].getDefense() << std::endl;
+                outFile << chars[i].getExperiencePoints() << std::endl;
+                outFile << chars[i].getStatus() << std::endl;
+            }
+        }
+    }
+    outFile.close();
+    std::cout << "Game saved successfully." << std::endl;
 }
