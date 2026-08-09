@@ -8,10 +8,11 @@
 
 //using namespace std;
 void displayMenu();
-void saveGame(Character *chars);
+void saveFile(Character *chars);
 void createCharacter(Character *chars);
 void viewCharacters(Character *chars);
 void deleteCharacter(Character *chars);
+void train(Character *chars);
 const int MAX = 10;
 
 int main()
@@ -39,6 +40,7 @@ int main()
             case 3:
             {
                 // Train Character
+                train(characters);
                 break; 
             }
             case 4:
@@ -60,7 +62,7 @@ int main()
             case 7:
             {
                 //Save game
-                saveGame(characters);
+                saveFile(characters);
                 break;
             }
             case 8:
@@ -180,7 +182,7 @@ void deleteCharacter(Character *chars)
     std::cout << "Character deleted successfully." << std::endl;
 }
 
-void saveGame(Character *chars)
+void saveFile(Character *chars)
 {
     // Implement save game logic here
     // Example: Save character data to a file
@@ -205,7 +207,42 @@ void saveGame(Character *chars)
                 outFile << chars[i].getStatus() << std::endl;
             }
         }
+        std::cout << "Game saved successfully." << std::endl;
+        outFile.close();
     }
-    outFile.close();
-    std::cout << "Game saved successfully." << std::endl;
+    
+}
+
+void train(Character *chars)
+{
+    std::cout << "Choose your character to train (Enter Character name): ";
+    std::string name;
+    std::cin.ignore(); // Clear the input buffer
+    std::getline(std::cin, name);
+    bool found = false;
+    for (int i = 0; i < MAX; i++)
+    {
+        if (chars[i].getName() == name)
+        {
+            found = true;
+            std::cout << name << " trained!" << std::endl;
+            int currentLevel = chars[i].getLevel();
+            chars[i].setLevel(currentLevel + 1);
+            std::cout << name << " is now level " << chars[i].getLevel() << std::endl;
+            int currentHealth = chars[i].getHealth();
+            chars[i].setHealth(currentHealth + 10);
+            std::cout << name << "'s health increased to " << chars[i].getHealth() << std::endl;
+            int currentAttackPower = chars[i].getAttackPower();
+            chars[i].setAttackPower(currentAttackPower + 5);
+            std::cout << name << "'s attack power increased to " << chars[i].getAttackPower() << std::endl;
+            int currentDefense = chars[i].getDefense();
+            chars[i].setDefense(currentDefense + 3);
+            std::cout << name << "'s defense increased to " << chars[i].getDefense() << std::endl;
+            break;
+        }
+    }
+    if (!found)
+    {
+        std::cout << "Character not found." << std::endl;
+    }
 }
