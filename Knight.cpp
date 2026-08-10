@@ -19,30 +19,38 @@ Knight::Knight()
     Weapon shield = Weapon("Shield", 20);
 }
 
-void Knight::swordAttack()
+void Knight::swordAttack(Character &target)
 {
     // Implement sword attack logic
     int damage = sword.getDamage();
     // You can add logic to apply damage to an enemy character here
     Character::setAttackPower(getAttackPower() + damage); 
+    int enemyHealth = target.getHealth();
+    enemyHealth -= damage; // Reduce target's health by damage
+    target.setHealth(enemyHealth);
+    std::cout << "Knight attacks " << target.getName() << " with the sword!" << std::endl;
 }
 
-void Knight::shieldBlock()
+void Knight::shieldBlock(Character &target)
 {
     // Implement shield block logic
     Character::setDefense(getDefense() + 45);
+    std::cout << "Knight blocks the attack with the shield!" << std::endl;
 
 }
 
-void Knight::shieldBash()
+void Knight::shieldBash(Character &target)
 {
     // Implement shield bash logic
     int damage = shield.getDamage();
     Character::setAttackPower(getAttackPower() + damage);
-    
+    int enemyHealth = target.getHealth();
+    enemyHealth -= damage;
+    target.setHealth(enemyHealth);
+    std::cout << "Knight bashes " << target.getName() << " with the shield!" << std::endl;
 }
 
-void Knight::specialSkill()
+void Knight::specialSkill(Character &target)
 {
     // Implement the knight's special skill logic
     // For example, a powerful attack or defensive move
@@ -59,17 +67,17 @@ void Knight::specialSkill()
     {
         case 1:
         {
-            swordAttack();
+            swordAttack(target);
             break;
         }
         case 2:
         {
-            shieldBlock();
+            shieldBlock(target);
             break;
         }
         case 3:
         {
-            shieldBash();
+            shieldBash(target);
             break;
         }
         default:

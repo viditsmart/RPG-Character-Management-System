@@ -15,22 +15,34 @@ Mage::Mage()
     setStatus("Alive");
 }
 
-void Mage::Fireball()
+void Mage::Fireball(Character &target)
 {
-
+    int damage = getAttackPower() * 2; // Example damage calculation
+    int enemyHealth = target.getHealth();
+    enemyHealth -= damage;
+    target.setHealth(enemyHealth);
+    std::cout << "Mage casts Fireball on " << target.getName() << "!" << std::endl;
 }
 
-void Mage::IceShard()
+void Mage::IceShard(Character &target)
 {
-
+    int damage = getAttackPower() * 1.5; // Example damage calculation
+    int enemyHealth = target.getHealth();
+    enemyHealth -= damage;
+    target.setHealth(enemyHealth);
+    std::cout << "Mage casts Ice Shard on " << target.getName() << "!" << std::endl;
 }
 
-void Mage::lightningStrike()
+void Mage::lightningStrike(Character &target)
 {
-
+    int damage = getAttackPower() * 3; // Example damage calculation
+    int enemyHealth = target.getHealth();
+    enemyHealth -= damage;
+    target.setHealth(enemyHealth);
+    std::cout << "Mage casts Lightning Strike on " << target.getName() << "!" << std::endl;
 }
 
-void Mage::specialSkill()
+void Mage::specialSkill(Character &target)
 {
     // Implement the mage's special skill logic
     // For example, a powerful attack or defensive move
@@ -47,17 +59,17 @@ void Mage::specialSkill()
     {
         case 1:
         {
-            Fireball();
+            Fireball(target);
             break;
         }
         case 2:
         {
-            IceShard();
+            IceShard(target);
             break;
         }
         case 3:
         {
-            lightningStrike();
+            lightningStrike(target);
             break;
         }
         default:

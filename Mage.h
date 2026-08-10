@@ -7,10 +7,10 @@ class Mage : public Character
 {
 public:
     Mage();
-    void Fireball();
-    void IceShard();
-    void lightningStrike();
-    void specialSkill() override;
+    void Fireball(Character &target);
+    void IceShard(Character &target);
+    void lightningStrike(Character &target);
+    void specialSkill(Character &target) override;
     ~Mage();
 private:
 

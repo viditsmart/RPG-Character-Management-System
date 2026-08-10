@@ -21,7 +21,7 @@ public:
     int getExperiencePoints() const;
     void setStatus(const std::string &s);
     std::string getStatus() const;
-    virtual void specialSkill() = 0; // Pure virtual function for special skill
+    virtual void specialSkill(Character &target) = 0; // Pure virtual function for special skill
     ~Character();
 
 private:
