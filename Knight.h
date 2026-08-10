@@ -14,6 +14,7 @@ public:
     void swordAttack();
     void shieldBlock();
     void shieldBash();
+    void specialSkill() override;
     ~Knight();
 };
 
