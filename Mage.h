@@ -10,6 +10,7 @@ public:
     void Fireball();
     void IceShard();
     void lightningStrike();
+    void specialSkill() override;
     ~Mage();
 private:
 
