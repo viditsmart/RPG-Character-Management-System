@@ -11,10 +11,10 @@ private:
 
 public:
     Knight();
-    void swordAttack();
-    void shieldBlock();
-    void shieldBash();
-    void specialSkill() override;
+    void swordAttack(Character &target);
+    void shieldBlock(Character &target);
+    void shieldBash(Character &target);
+    void specialSkill(Character &target) override;
     ~Knight();
 };
 
