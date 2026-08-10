@@ -13,6 +13,8 @@ void createCharacter(Character *chars);
 void viewCharacters(Character *chars);
 void deleteCharacter(Character *chars);
 void train(Character *chars);
+void battle(Character *chars);
+void loadFile(Character *chars);
 const int MAX = 10;
 
 int main()
@@ -46,11 +48,33 @@ int main()
             case 4:
             {
                 // Battle Simulation
+                battle(characters);
                 break; 
             }
             case 5:
             {
                 //Heal Character
+                std::cout << "Choose your character to heal (Enter Character name): ";
+                std::string name;
+                std::cin.ignore(); // Clear the input buffer
+                std::getline(std::cin, name);
+                bool found = false;
+                for (int i = 0; i < MAX; i++)
+                {
+                    if (characters[i].getName() == name)
+                    {
+                        found = true;
+                        Doctor doctor;
+                        int healedHealth = doctor.Heal();
+                        characters[i].setHealth(healedHealth);
+                        std::cout << name << " has been healed! New health: " << characters[i].getHealth() << std::endl;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    std::cout << "Character not found." << std::endl;
+                }   
                 break;
             }
             case 6:
@@ -68,6 +92,7 @@ int main()
             case 8:
             {
                 //Load game
+                loadFile(characters);
                 break;
             }
             default:
@@ -80,6 +105,8 @@ int main()
         displayMenu();
         std::cin >> option;
     }
+    delete[] characters; // Free the allocated memory for characters
+    std::cout << "Exiting the program." << std::endl;
 
     return 0;
 }
@@ -244,5 +271,79 @@ void train(Character *chars)
     if (!found)
     {
         std::cout << "Character not found." << std::endl;
+    }
+}
+
+void battle(Character *chars)
+{
+    std::cout << "Choose your character for battle (Enter Character name): ";
+    std::string name;
+    std::cin.ignore(); // Clear the input buffer
+    std::getline(std::cin, name);
+    std::cout << "Choose your opponent for battle (Enter Character name): ";
+    std::string opponentName;
+    std::getline(std::cin, opponentName);
+    bool found = false;
+    for (int i = 0; i < MAX; i++)
+    {
+        if (chars[i].getName() == name )
+        {
+            found = true;
+            std::cout << name << " is ready for battle!" << std::endl;
+            for (int j = 0; j < MAX; j++)
+            {
+                if (chars[j].getName() == opponentName)
+                {
+                    found = true;
+                    std::cout << opponentName << " is ready for battle!" << std::endl;
+                    // Implement battle logic here
+                    chars[i].specialSkill(chars[j]); // Call the special skill of the player's character
+                    chars[j].specialSkill(chars[i]); // Call the special skill of the opponent's character
+                    break;
+                }
+            }
+            // Implement battle logic here
+            break;
+        }
+    }
+    if (!found)
+    {
+        std::cout << "Character not found." << std::endl;
+    }
+}
+
+void loadFile(Character *chars)
+{
+    // Implement load game logic here
+    // Example: Load character data from a file
+    std::ifstream inFile("characters.txt");
+    if (!inFile)
+    {
+        std::cout << "Error opening file for reading." << std::endl;
+        return;
+    }
+    else
+    {
+        for (int i = 0; i < MAX; i++)
+        {
+            std::string name;
+            int level, health, attackPower, defense, experiencePoints;
+            std::string status;
+            if (std::getline(inFile, name))
+            {
+                inFile >> level >> health >> attackPower >> defense >> experiencePoints;
+                inFile.ignore(); // Ignore the newline character after reading integers
+                std::getline(inFile, status);
+                chars[i].setName(name);
+                chars[i].setLevel(level);
+                chars[i].setHealth(health);
+                chars[i].setAttackPower(attackPower);
+                chars[i].setDefense(defense);
+                chars[i].setExperiencePoints(experiencePoints);
+                chars[i].setStatus(status);
+            }
+        }
+        std::cout << "Game loaded successfully." << std::endl;
+        inFile.close();
     }
 }
