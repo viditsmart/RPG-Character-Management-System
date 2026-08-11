@@ -7,6 +7,7 @@
 #include <fstream>
 
 //using namespace std;
+bool findCharacter(Character *chars, const std::string &name);
 void displayMenu();
 void saveFile(Character *chars);
 void createCharacter(Character *chars);
@@ -15,6 +16,7 @@ void deleteCharacter(Character *chars);
 void train(Character *chars);
 void battle(Character *chars);
 void loadFile(Character *chars);
+int levelUp(Character *chars, int index);
 const int MAX = 10;
 
 int main()
@@ -192,21 +194,28 @@ void viewCharacters(Character *chars)
 
 void deleteCharacter(Character *chars)
 {
-    std::cout << "Enter the index of the character to delete (1-" << MAX << "): ";
-    int index;
-    std::cin >> index;
-    if (index < 1 || index > MAX)
+    std::cout << "Enter the name of the character to delete: ";
+    std::string name;
+    std::cin.ignore(); // Clear the input buffer
+    std::getline(std::cin, name);
+    findCharacter(chars, name);
+    if (findCharacter(chars, name))
     {
-        std::cout << "Invalid index. Please try again." << std::endl;
-        return;
+        for (int i = 0; i < MAX; i++)
+        {
+            if (chars[i].getName() == name)
+            {
+                chars[i] = Character(); // Reset the character to default values
+                std::cout << "Character " << name << " deleted successfully." << std::endl;
+                break;
+            }
+        }
     }
-    if (chars[index - 1].getName().empty())
+    else
     {
-        std::cout << "No character found at this index." << std::endl;
-        return;
+        std::cout << "Character not found. Deletion failed." << std::endl;
     }
-    chars[index - 1] = Character(); // Reset the character at the specified index
-    std::cout << "Character deleted successfully." << std::endl;
+
 }
 
 void saveFile(Character *chars)
@@ -246,31 +255,23 @@ void train(Character *chars)
     std::string name;
     std::cin.ignore(); // Clear the input buffer
     std::getline(std::cin, name);
-    bool found = false;
-    for (int i = 0; i < MAX; i++)
+    findCharacter(chars, name);
+    if (findCharacter(chars, name))
     {
-        if (chars[i].getName() == name)
+        for (int i = 0; i < MAX; i++)
         {
-            found = true;
-            std::cout << name << " trained!" << std::endl;
-            int currentLevel = chars[i].getLevel();
-            chars[i].setLevel(currentLevel + 1);
-            std::cout << name << " is now level " << chars[i].getLevel() << std::endl;
-            int currentHealth = chars[i].getHealth();
-            chars[i].setHealth(currentHealth + 10);
-            std::cout << name << "'s health increased to " << chars[i].getHealth() << std::endl;
-            int currentAttackPower = chars[i].getAttackPower();
-            chars[i].setAttackPower(currentAttackPower + 5);
-            std::cout << name << "'s attack power increased to " << chars[i].getAttackPower() << std::endl;
-            int currentDefense = chars[i].getDefense();
-            chars[i].setDefense(currentDefense + 3);
-            std::cout << name << "'s defense increased to " << chars[i].getDefense() << std::endl;
-            break;
+            if (chars[i].getName() == name)
+            {
+                int currentLevel = chars[i].getLevel();
+                chars[i].setLevel(currentLevel + 1);
+                std::cout << name << " has been trained! New level: " << chars[i].getLevel() << std::endl;
+                break;
+            }
         }
     }
-    if (!found)
+    else
     {
-        std::cout << "Character not found." << std::endl;
+        std::cout << "Character not found. Training failed." << std::endl;
     }
 }
 
@@ -346,4 +347,45 @@ void loadFile(Character *chars)
         std::cout << "Game loaded successfully." << std::endl;
         inFile.close();
     }
+}
+
+bool findCharacter(Character *chars, const std::string &name)
+{
+    //bool found = false;
+    for (int i = 0; i < MAX; i++)
+    {
+        if (chars[i].getName() == name)
+        {
+            std::cout << "Character found: " << chars[i].getName() << std::endl;
+            return true;
+        }
+    }
+    std::cout << "Character not found." << std::endl;
+    return false;
+}
+
+int levelUp(Character *chars, int index)
+{
+    if (index < 0 || index >= MAX)
+    {
+        std::cout << "Invalid character index." << std::endl;
+        return -1; // Return an error code for invalid index
+    }
+    //We want to level up with experience points for the character at the given index
+    int currentLevel = chars[index].getLevel();
+    int currentXP = chars[index].getExperiencePoints();
+    // Assuming that the experience points required for leveling up is 100 * currentLevel
+    int xpRequired = 100 * currentLevel;
+    if (currentXP >= xpRequired)
+    {
+        chars[index].setLevel(currentLevel + 1);
+        chars[index].setExperiencePoints(currentXP - xpRequired); // Deduct the used experience
+        std::cout << chars[index].getName() << " has leveled up! Newlevel: " << chars[index].getLevel() << std::endl;
+    }
+    else
+    {
+        std::cout << chars[index].getName() << " does not have enough experience points to level up." << std::endl;
+    }
+
+    return chars[index].getLevel(); // Return the new level
 }
