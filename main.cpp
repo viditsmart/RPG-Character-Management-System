@@ -17,6 +17,7 @@ void train(Character *chars);
 void battle(Character *chars);
 void loadFile(Character *chars);
 int levelUp(Character *chars, int index);
+int calculateDamage(Character *attacker, Character *defender);
 const int MAX = 10;
 
 int main()
@@ -262,9 +263,8 @@ void train(Character *chars)
         {
             if (chars[i].getName() == name)
             {
-                int currentLevel = chars[i].getLevel();
-                chars[i].setLevel(currentLevel + 1);
-                std::cout << name << " has been trained! New level: " << chars[i].getLevel() << std::endl;
+                int newLevel = levelUp(chars, i);
+                std::cout << name << " has been trained! New level: " << newLevel << std::endl;
                 break;
             }
         }
@@ -388,4 +388,16 @@ int levelUp(Character *chars, int index)
     }
 
     return chars[index].getLevel(); // Return the new level
+}
+
+int calculateDamage(Character *attacker, Character *defender)
+{
+    int attackPower = attacker->getAttackPower();
+    int defense = defender->getDefense();
+    int damage = attackPower - defense;
+    if (damage < 0)
+    {
+        damage = 0; // Ensure that damage is not negative
+    }
+    return damage;
 }
