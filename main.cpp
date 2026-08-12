@@ -18,6 +18,7 @@ void battle(Character *chars);
 void loadFile(Character *chars);
 int levelUp(Character *chars, int index);
 int calculateDamage(Character *attacker, Character *defender);
+void sortCharactersByLevel(Character *chars, int size);
 const int MAX = 10;
 
 int main()
@@ -67,10 +68,18 @@ int main()
                     if (characters[i].getName() == name)
                     {
                         found = true;
-                        Doctor doctor;
-                        int healedHealth = doctor.Heal();
-                        characters[i].setHealth(healedHealth);
-                        std::cout << name << " has been healed! New health: " << characters[i].getHealth() << std::endl;
+                        Doctor *doctor = dynamic_cast<Doctor*>(&characters[i]); // Cast the character to Doctor
+                        if (doctor != nullptr)
+                        {
+                            int healedHealth = doctor->Heal();
+                            characters[i].setHealth(healedHealth);
+                            std::cout << name << " has been healed! New health: " << characters[i].getHealth() << std::endl;
+                        }
+                        else
+                        {
+                            std::cout << name << " is not a Doctor and cannot heal." << std::endl;
+                        }
+                        
                         break;
                     }
                 }
@@ -148,6 +157,7 @@ void createCharacter(Character *chars)
         std::cout << "2. Mage" << std::endl;
         std::cout << "3. Doctor" << std::endl;
         std::cin >> charOption;
+        std::cin.ignore();
         std::string name;
         std::cout << "Enter character name: ";
         getline(std::cin, name);
@@ -233,7 +243,7 @@ void saveFile(Character *chars)
     {
         for (int i = 0; i < MAX; i++)
         {
-            if (!chars[i].getName().empty())
+            if (chars != nullptr && !chars[i].getName().empty())
             {
                 outFile << chars[i].getName() << std::endl;
                 outFile << chars[i].getLevel() << std::endl;
@@ -264,7 +274,14 @@ void train(Character *chars)
             if (chars[i].getName() == name)
             {
                 int newLevel = levelUp(chars, i);
-                std::cout << name << " has been trained! New level: " << newLevel << std::endl;
+                if (newLevel == chars[i].getLevel())
+                {
+                    std::cout << name << " does not have enough experience points to level up." << std::endl;
+                }
+                else
+                {
+                    std::cout << name << " has leveled up! New level: " << newLevel << std::endl;
+                }
                 break;
             }
         }
@@ -297,9 +314,37 @@ void battle(Character *chars)
                 {
                     found = true;
                     std::cout << opponentName << " is ready for battle!" << std::endl;
+                    while(chars[i].getHealth() > 0 && chars[j].getHealth() > 0)
+                    {
+                        std::cout << "Battle between " << name << " and " << opponentName << "!" << std::endl;
+                        std::cout << name << "'s Health: " << chars[i].getHealth() << std::endl;
+                        std::cout << opponentName << "'s Health: " << chars[j].getHealth() << std::endl;
+                        std::cout << "------------------------" << std::endl;
+                        // Implement battle logic here
+                        // For example, you can call the specialSkill method of each character
+                        if (chars[i].getHealth() <= 0)
+                        {
+                            std::cout << name << " has been defeated!" << std::endl;
+                            break; // Exit the battle loop if the player's character is defeated
+                        }
+                        else
+                        {
+                            chars[i].specialSkill(chars[j]); // Call the special skill of the player's character
+                        }
+                    
+                        if (chars[j].getHealth() <= 0)
+                        {
+                            std::cout << opponentName << " has been defeated!" << std::endl;
+                            break; // Exit the battle loop if the opponent is defeated
+                        }
+                        else
+                        {
+                            chars[j].specialSkill(chars[i]); // Call the special skill of the opponent's character
+                        }
+                    }
+                    
                     // Implement battle logic here
-                    chars[i].specialSkill(chars[j]); // Call the special skill of the player's character
-                    chars[j].specialSkill(chars[i]); // Call the special skill of the opponent's character
+                    
                     break;
                 }
             }
@@ -400,4 +445,21 @@ int calculateDamage(Character *attacker, Character *defender)
         damage = 0; // Ensure that damage is not negative
     }
     return damage;
+}
+
+void sortCharactersByLevel(Character *chars, int size)
+{
+    for (int i = 0; i < size - 1; i++)
+    {
+        for (int j = 0; j < size - i - 1; j++)
+        {
+            if (chars[j].getLevel() < chars[j + 1].getLevel())
+            {
+                // Swap characters
+                Character temp = chars[j];
+                chars[j] = chars[j + 1];
+                chars[j + 1] = temp;
+            }
+        }
+    }
 }
