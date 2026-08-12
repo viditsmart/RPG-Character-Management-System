@@ -24,38 +24,48 @@ const int MAX = 10;
 //Main function
 int main()
 {
+    //Pointer array for storing characters
     Character* characters = new Character[MAX]; // Pointer to hold the created character
+    //this varaible is initialized for input from the user to choose the option from the menu
     int option;
-    //int i = 0;
+    //displayMenu option called
     displayMenu();
+    //input from the user for the option
     std::cin >> option;
+    //loop until the user chooses 9 to exit the program
     while (option != 9)
     {
+        //switch case for the option chosen by the user
         switch(option)
         {
+            //If the user chooses 1, createCharacter function is called
             case 1: 
             {
                 createCharacter(characters);
                 break; 
             }
+            //If the user chooses 2, viewCharacters function is called
             case 2: 
             {
                 // View Characters
                 viewCharacters(characters);
                 break; 
             }
+            //If the user chooses 3, trainCharacter function is called
             case 3:
             {
                 // Train Character
                 train(characters);
                 break; 
             }
+            //If the user chooses 4, battle function is called
             case 4:
             {
                 // Battle Simulation
                 battle(characters);
                 break; 
             }
+            //if the user chooses 5, healCharacter function is called
             case 5:
             {
                 //Heal Character
@@ -90,24 +100,28 @@ int main()
                 }   
                 break;
             }
+            //If the user chooses 6, deleteCharacter function is called
             case 6:
             {
                 //Delete character
                 deleteCharacter(characters);
                 break;
             }
+            //if the user chooses 7, saveFile function is called
             case 7:
             {
                 //Save game
                 saveFile(characters);
                 break;
             }
+            //if the user chooses 8, loadFile function is called
             case 8:
             {
                 //Load game
                 loadFile(characters);
                 break;
             }
+            //if the user chooses an invalid option, display this message
             default:
             {
                 std::cout << "Invalid option. Please try again." << std::endl;
@@ -124,6 +138,7 @@ int main()
     return 0;
 }
 
+//This function displays the game menu to the user and prompts them to choose an option. It provides options for creating characters, viewing characters, training characters, simulating battles, healing characters, deleting characters, saving the game, loading the game, and exiting the program.
 void displayMenu()
 {
     std::cout << "=========================" << std::endl;
@@ -142,6 +157,7 @@ void displayMenu()
     std::cout << "Enter your choice: ";
 }
 
+//This function creates a new character based on the user's choice of character type (Knight, Mage, or Doctor). It prompts the user to enter a name for the character and initializes the character's attributes accordingly. The created character is stored in the provided array of characters.
 void createCharacter(Character *chars)
 {
     static int index = 0;
@@ -191,8 +207,10 @@ void createCharacter(Character *chars)
 
 }
 
+//This function displays the list of characters stored in the provided array. It sorts the characters by their level and prints their names, types, and levels to the console.  
 void viewCharacters(Character *chars)
 {
+    sortCharactersByLevel(chars, MAX);
     std::cout << "List of Characters: " << std::endl;
     for (int i = 0; i < MAX; i++)
     {
@@ -205,6 +223,7 @@ void viewCharacters(Character *chars)
     }
 }
 
+//This function deletes a character from the provided array based on the user's input. It prompts the user to enter the name of the character to delete, searches for the character in the array, and resets its attributes to default values if found. If the character is not found, it displays an appropriate message.
 void deleteCharacter(Character *chars)
 {
     std::cout << "Enter the name of the character to delete: ";
@@ -231,10 +250,12 @@ void deleteCharacter(Character *chars)
 
 }
 
+//This function saves the current state of the game by writing character data to a file named "characters.txt". It sorts the characters by level and writes their attributes (name, type, level, health, attack power, defense, experience points, and status) to the file. If the file cannot be opened for writing, it displays an error message.
 void saveFile(Character *chars)
 {
     // Implement save game logic here
     // Example: Save character data to a file
+    sortCharactersByLevel(chars, MAX);
     std::ofstream outFile("characters.txt");
     if (!outFile)
     {
@@ -428,6 +449,7 @@ void loadFile(Character *chars)
     }
 }
 
+
 bool findCharacter(Character *chars, const std::string &name)
 {
     //bool found = false;
@@ -486,6 +508,7 @@ int calculateDamage(Character *player1, Character *player2)
     return damage;
 }
 
+//This function sorts the characters in the provided array based on their level in descending order. It uses a simple bubble sort algorithm to compare the levels of characters and swap them if necessary. The sorted array allows for easier viewing and management of characters based on their levels.
 void sortCharactersByLevel(Character *chars, int size)
 {
     for (int i = 0; i < size - 1; i++)
