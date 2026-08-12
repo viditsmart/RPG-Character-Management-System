@@ -3,6 +3,7 @@
 Character::Character()
 {
     name = "Unknown";
+    characterType = "Unknown";
     level = 1;
     health = 100;
     attack_power = 20;

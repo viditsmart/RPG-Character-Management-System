@@ -6,7 +6,7 @@
 #include "Mage.h"
 #include <fstream>
 
-//using namespace std;
+//Member functions
 bool findCharacter(Character *chars, const std::string &name);
 void displayMenu();
 void saveFile(Character *chars);
@@ -21,6 +21,7 @@ int calculateDamage(Character *player1, Character *player2);
 void sortCharactersByLevel(Character *chars, int size);
 const int MAX = 10;
 
+//Main function
 int main()
 {
     Character* characters = new Character[MAX]; // Pointer to hold the created character
@@ -198,6 +199,7 @@ void viewCharacters(Character *chars)
         if (!chars[i].getName().empty())
         {
             std::cout << "Character " << i + 1 << ": " << chars[i].getName() << std::endl;
+            std::cout << "Type: " << chars[i].getCharacterType() << std::endl;
             std::cout << "Level: " << chars[i].getLevel() << std::endl;
         }
     }
@@ -246,12 +248,14 @@ void saveFile(Character *chars)
             if (chars != nullptr && !chars[i].getName().empty())
             {
                 outFile << chars[i].getName() << std::endl;
+                outFile << chars[i].getCharacterType() << std::endl;
                 outFile << chars[i].getLevel() << std::endl;
                 outFile << chars[i].getHealth() << std::endl;
                 outFile << chars[i].getAttackPower() << std::endl;
                 outFile << chars[i].getDefense() << std::endl;
                 outFile << chars[i].getExperiencePoints() << std::endl;
                 outFile << chars[i].getStatus() << std::endl;
+                outFile << std::endl; // Add a blank line between characters for readability
             }
         }
         std::cout << "Game saved successfully." << std::endl;
@@ -382,24 +386,42 @@ void loadFile(Character *chars)
     }
     else
     {
-        for (int i = 0; i < MAX; i++)
+        std::string name, classType;
+        int level, health, attackPower, defense, experiencePoints;
+        std::string status;
+        int i = 0;
+        while (i < MAX && std::getline(inFile, classType))
         {
-            std::string name;
-            int level, health, attackPower, defense, experiencePoints;
-            std::string status;
-            if (std::getline(inFile, name))
+            std::getline(inFile, name);
+            inFile >> level >> health >> attackPower >> defense >> experiencePoints;
+            inFile.ignore(); // Ignore the newline character after reading integers
+            std::getline(inFile, status);
+            if (classType == "Knight")
             {
-                inFile >> level >> health >> attackPower >> defense >> experiencePoints;
-                inFile.ignore(); // Ignore the newline character after reading integers
-                std::getline(inFile, status);
-                chars[i].setName(name);
-                chars[i].setLevel(level);
-                chars[i].setHealth(health);
-                chars[i].setAttackPower(attackPower);
-                chars[i].setDefense(defense);
-                chars[i].setExperiencePoints(experiencePoints);
-                chars[i].setStatus(status);
+                chars[i] = Knight();
             }
+            else if (classType == "Mage")
+            {
+                chars[i] = Mage();
+            }
+            else if (classType == "Doctor")
+            {
+                chars[i] = Doctor();
+            }
+            else
+            {
+                std::cout << "Unknown character type in file: " << classType << std::endl;
+                continue; // Skip to the next iteration if the character type is unknown
+            }
+            chars[i].setName(name);
+            chars[i].setCharacterType(classType);
+            chars[i].setLevel(level);
+            chars[i].setHealth(health);
+            chars[i].setAttackPower(attackPower);
+            chars[i].setDefense(defense);
+            chars[i].setExperiencePoints(experiencePoints);
+            chars[i].setStatus(status);
+            i++;
         }
         std::cout << "Game loaded successfully." << std::endl;
         inFile.close();
