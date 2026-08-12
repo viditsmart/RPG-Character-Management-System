@@ -9,6 +9,8 @@ public:
     Character();
     void setName(const std::string &n);
     std::string getName() const;
+    void setCharacterType(const std::string &ct);
+    std::string getCharacterType() const;
     void setLevel(int l);
     int getLevel() const;
     void setHealth(int h);
@@ -27,6 +29,7 @@ public:
 private:
     // Private members
     std::string name;
+    std::string characterType;
     int level;
     int health;
     int attack_power;

@@ -3,6 +3,7 @@
 
 Doctor::Doctor()
 {
+   setCharacterType("Doctor");
    setLevel(1);
    setHealth(250);
    setAttackPower(15);

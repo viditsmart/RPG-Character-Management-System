@@ -9,6 +9,7 @@
 Knight::Knight()
 {
     // Initialize the knight's weapons
+    setCharacterType("Knight");
     setLevel(1);
     setHealth(750);
     setAttackPower(38);

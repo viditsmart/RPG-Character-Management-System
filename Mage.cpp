@@ -7,6 +7,7 @@
 
 Mage::Mage()
 {
+    setCharacterType("Mage");
     setLevel(1);
     setHealth(315);
     setAttackPower(25);

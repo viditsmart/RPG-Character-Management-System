@@ -21,6 +21,16 @@ std::string Character::getName() const
     return name;
 }
 
+void Character::setCharacterType(const std::string &ct)
+{
+    characterType = ct;
+}
+
+std::string Character::getCharacterType() const
+{
+    return characterType;
+}
+
 void Character::setLevel(int l)
 {
     level = l;
