@@ -16,7 +16,7 @@ void deleteCharacter(Character *chars);
 void train(Character *chars);
 void battle(Character *chars);
 void loadFile(Character *chars);
-int levelUp(Character *chars, int index);
+void levelUp(Character *chars, int index);
 int calculateDamage(Character *player1, Character *player2);
 void sortCharactersByLevel(Character *chars, int size);
 void heal(Character *chars);
@@ -271,16 +271,10 @@ void train(Character *chars)
         {
             if (chars[i].getName() == name)
             {
-                int newLevel = levelUp(chars, i);
-                if (newLevel == chars[i].getLevel())
-                {
-                    std::cout << name << " does not have enough experience points to level up." << std::endl;
-                }
-                else
-                {
-                    std::cout << name << " has leveled up! New level: " << newLevel << std::endl;
-                }
-                break;
+                
+                std::cout << name << " trained." << std::endl;
+                chars[i].setExperiencePoints(chars[i].getExperiencePoints() + 25);
+                levelUp(chars, i);
             }
         }
     }
@@ -438,30 +432,38 @@ bool findCharacter(Character *chars, const std::string &name)
     return false;
 }
 
-int levelUp(Character *chars, int index)
+void levelUp(Character *chars, int index)
 {
     if (index < 0 || index >= MAX)
     {
         std::cout << "Invalid character index." << std::endl;
-        return -1; // Return an error code for invalid index
+        return; // Return an error code for invalid index
     }
     //We want to level up with experience points for the character at the given index
     int currentLevel = chars[index].getLevel();
     int currentXP = chars[index].getExperiencePoints();
+    int currentAttackPowwer = chars[index].getAttackPower();
+    int currentDefense = chars[index].getDefense();
+
     // Assuming that the experience points required for leveling up is 100 * currentLevel
     int xpRequired = 100 * currentLevel;
     if (currentXP >= xpRequired)
     {
         chars[index].setLevel(currentLevel + 1);
         chars[index].setExperiencePoints(currentXP - xpRequired); // Deduct the used experience
+        chars[index].setAttackPower(currentAttackPowwer + 3);
+        chars[index].setDefense(currentDefense + 2);
+
         std::cout << chars[index].getName() << " has leveled up! Newlevel: " << chars[index].getLevel() << std::endl;
+        std::cout << "New Attack Power: " << chars[index].getAttackPower();
+        std::cout << "New Defense: " << chars[index].getDefense();
     }
     else
     {
         std::cout << chars[index].getName() << " does not have enough experience points to level up." << std::endl;
     }
 
-    return chars[index].getLevel(); // Return the new level
+    //return chars[index].getLevel(); // Return the new level
 }
 
 int calculateDamage(Character *player1, Character *player2)
