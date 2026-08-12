@@ -19,6 +19,7 @@ void loadFile(Character *chars);
 int levelUp(Character *chars, int index);
 int calculateDamage(Character *player1, Character *player2);
 void sortCharactersByLevel(Character *chars, int size);
+void heal(Character *chars);
 const int MAX = 10;
 
 //Main function
@@ -69,35 +70,7 @@ int main()
             case 5:
             {
                 //Heal Character
-                std::cout << "Choose your character to heal (Enter Character name): ";
-                std::string name;
-                std::cin.ignore(); // Clear the input buffer
-                std::getline(std::cin, name);
-                bool found = false;
-                for (int i = 0; i < MAX; i++)
-                {
-                    if (characters[i].getName() == name)
-                    {
-                        found = true;
-                        Doctor *doctor = dynamic_cast<Doctor*>(&characters[i]); // Cast the character to Doctor
-                        if (doctor != nullptr)
-                        {
-                            int healedHealth = doctor->Heal();
-                            characters[i].setHealth(healedHealth);
-                            std::cout << name << " has been healed! New health: " << characters[i].getHealth() << std::endl;
-                        }
-                        else
-                        {
-                            std::cout << name << " is not a Doctor and cannot heal." << std::endl;
-                        }
-                        
-                        break;
-                    }
-                }
-                if (!found)
-                {
-                    std::cout << "Character not found." << std::endl;
-                }   
+                heal(characters);
                 break;
             }
             //If the user chooses 6, deleteCharacter function is called
@@ -524,4 +497,41 @@ void sortCharactersByLevel(Character *chars, int size)
             }
         }
     }
+}
+
+void heal(Character *chars)
+{
+    std::cout << "Choose doctor: ";
+    std::string name;
+    std::getline(std::cin, name);
+    std::cin.ignore(); // Clear the input buffer
+    std::cout << "Choose patient: ";
+    std::string patientName;
+    std::getline(std::cin, patientName);
+    bool found = false;
+    if (findCharacter(chars, name) && findCharacter(chars, patientName))
+    {
+        for (int i = 0; i < MAX; i++)
+        {
+            if (chars[i].getName() == name && chars[i].getCharacterType() == "Doctor")
+            {
+                found = true;
+                for (int j = 0; j < MAX; j++)
+                {
+                    if (chars[j].getName() == patientName)
+                    {
+                        int newHealth = static_cast<Doctor*>(&chars[i])->Heal();
+                        chars[j].setHealth(newHealth);
+                        std::cout << patientName << " has been healed by " << name << "!" << std::endl;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+    }
+    if (!found)
+    {
+        std::cout << "Character not found." << std::endl;
+    }  
 }
