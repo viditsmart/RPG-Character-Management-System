@@ -520,7 +520,7 @@ void heal(Character *chars)
                 {
                     if (chars[j].getName() == patientName)
                     {
-                        int newHealth = static_cast<Doctor*>(&chars[i])->Heal();
+                        int newHealth = static_cast<Doctor*>(&chars[i])->Heal(chars[j]);
                         chars[j].setHealth(newHealth);
                         std::cout << patientName << " has been healed by " << name << "!" << std::endl;
                         break;

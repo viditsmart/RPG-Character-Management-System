@@ -7,7 +7,8 @@ class Doctor : public Character
 {
 public:
     Doctor();
-    int Heal();
+    int Heal(Character &patient);
+    void specialSkill(Character &patient) override;
     ~Doctor();
 private:
 

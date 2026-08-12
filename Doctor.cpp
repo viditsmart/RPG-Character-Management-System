@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Doctor.h"
+#include <iostream>
 
 Doctor::Doctor()
 {
@@ -12,9 +13,19 @@ Doctor::Doctor()
    setStatus("Alive");
 }
 
-int Doctor::Heal()
+int Doctor::Heal(Character &patient)
 {
-   int hp = Character::getHealth();
+   if (patient.getStatus() == "Dead")
+   {
+      std::cout << patient.getName() << " is dead and cannot be healed." << std::endl;
+      return;
+   }
+   int hp = patient.getHealth();
    hp+=30;
    return hp;
+}
+
+void Doctor::specialSkill(Character &patient)
+{
+   Heal(patient);
 }
