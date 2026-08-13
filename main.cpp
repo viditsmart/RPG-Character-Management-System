@@ -214,6 +214,7 @@ void viewCharacters(Character *chars[], int count)
             std::cout << "Character " << i + 1 << ": " << chars[i]->getName() << std::endl;
             std::cout << "Type: " << chars[i]->getCharacterType() << std::endl;
             std::cout << "Level: " << chars[i]->getLevel() << std::endl;
+            std::cout << std::endl;
         }
         else 
             continue;
