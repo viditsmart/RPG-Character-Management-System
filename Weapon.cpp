@@ -34,3 +34,8 @@ int Weapon::getDamage()
 {
     return damage;
 }
+
+Weapon::~Weapon()
+{
+    std::cout << "Weapon destructor called" << std::endl;
+}
