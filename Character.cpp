@@ -92,6 +92,17 @@ std::string Character::getStatus() const
     return status;
 }
 
+void Character::specialSkill(Character &target) 
+{
+    int damage = getAttackPower() - (target.getDefense()/2);
+    if (damage < 0)
+    {
+        damage = 0;
+    }
+    target.setHealth(target.getHealth() - damage);
+}
+
+
 Character::~Character()
 {
     // Destructor implementation (if needed)

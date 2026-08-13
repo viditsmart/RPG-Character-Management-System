@@ -7,27 +7,30 @@
 #include <fstream>
 
 //Member functions
-bool findCharacter(Character *chars, const std::string &name);
-void displayMenu();
-void saveFile(Character *chars);
-void createCharacter(Character *chars);
-void viewCharacters(Character *chars);
-void deleteCharacter(Character *chars);
-void train(Character *chars);
-void battle(Character *chars);
-void loadFile(Character *chars);
-void levelUp(Character *chars, int index);
-int calculateDamage(Character *player1, Character *player2);
-void sortCharactersByLevel(Character *chars, int size);
-void heal(Character *chars);
 const int MAX = 10;
+void displayMenu();
+int findCharacter(Character *chars[], int count, const std::string &name);
+void saveFile(Character *chars[], int count);
+void createCharacter(Character *chars[], int &count);
+void viewCharacters(Character *chars[], int count);
+void deleteCharacter(Character *chars[], int &count);
+void train(Character *chars[], int count);
+void battle(Character *chars[], int count);
+void loadFile(Character *chars[], int &count);
+void levelUp(Character *chars[], int index);
+int calculateDamage(Character *player1, Character *player2);
+void sortCharactersByLevel(Character *chars[], int size);
+void heal(Character *chars[], int count);
+
+
 
 //Main function
 int main()
 {
     //Pointer array for storing characters
-    Character* characters = new Character[MAX]; // Pointer to hold the created character
+    Character* characters[MAX] = {nullptr}; // Pointer to hold the created character
     //this varaible is initialized for input from the user to choose the option from the menu
+    int charCount = 0;
     int option;
     //displayMenu option called
     displayMenu();
@@ -42,56 +45,56 @@ int main()
             //If the user chooses 1, createCharacter function is called
             case 1: 
             {
-                createCharacter(characters);
+                createCharacter(characters, charCount);
                 break; 
             }
             //If the user chooses 2, viewCharacters function is called
             case 2: 
             {
                 // View Characters
-                viewCharacters(characters);
+                viewCharacters(characters, charCount);
                 break; 
             }
             //If the user chooses 3, trainCharacter function is called
             case 3:
             {
                 // Train Character
-                train(characters);
+                train(characters, charCount);
                 break; 
             }
             //If the user chooses 4, battle function is called
             case 4:
             {
                 // Battle Simulation
-                battle(characters);
+                battle(characters, charCount);
                 break; 
             }
             //if the user chooses 5, healCharacter function is called
             case 5:
             {
                 //Heal Character
-                heal(characters);
+                heal(characters, charCount);
                 break;
             }
             //If the user chooses 6, deleteCharacter function is called
             case 6:
             {
                 //Delete character
-                deleteCharacter(characters);
+                deleteCharacter(characters, charCount);
                 break;
             }
             //if the user chooses 7, saveFile function is called
             case 7:
             {
                 //Save game
-                saveFile(characters);
+                saveFile(characters, charCount);
                 break;
             }
             //if the user chooses 8, loadFile function is called
             case 8:
             {
                 //Load game
-                loadFile(characters);
+                loadFile(characters, charCount);
                 break;
             }
             //if the user chooses an invalid option, display this message
@@ -105,7 +108,11 @@ int main()
         displayMenu();
         std::cin >> option;
     }
-    delete[] characters; // Free the allocated memory for characters
+    for (int i = 0; i < charCount; i++)
+    {
+        delete characters[i]; // Free the allocated memory for characters
+    }
+    
     std::cout << "Exiting the program." << std::endl;
 
     return 0;
@@ -130,11 +137,26 @@ void displayMenu()
     std::cout << "Enter your choice: ";
 }
 
-//This function creates a new character based on the user's choice of character type (Knight, Mage, or Doctor). It prompts the user to enter a name for the character and initializes the character's attributes accordingly. The created character is stored in the provided array of characters.
-void createCharacter(Character *chars)
+int findCharacter(Character *chars[], int count, const std::string &name)
 {
-    static int index = 0;
-    if (index >= MAX)
+    //bool found = false;
+    for (int i = 0; i < count; i++)
+    {
+        if (chars[i] != nullptr && chars[i]->getName() == name)
+        {
+            //std::cout << "Character found: " << chars[i].getName() << std::endl;
+            return i;
+        }
+    }
+   // std::cout << "Character not found." << std::endl;
+    return -1;
+}
+
+//This function creates a new character based on the user's choice of character type (Knight, Mage, or Doctor). It prompts the user to enter a name for the character and initializes the character's attributes accordingly. The created character is stored in the provided array of characters.
+void createCharacter(Character *chars[], int &count)
+{
+   // static int index = 0;
+    if (count >= MAX)
     {
         std::cout << "Maximum number of characters reached." << std::endl;
 
@@ -153,82 +175,85 @@ void createCharacter(Character *chars)
         getline(std::cin, name);
         if (charOption == 1)
         {
-            Character *knight = new Knight();
-            knight->setName(name);
-            chars[index] = *knight;
-            index++;
+            //Character *knight = new Knight();
+            //knight->setName(name);
+            chars[count] = new Knight();
         }
         else if (charOption == 2)
         {
-            Character *mage = new Mage();
-            mage->setName(name);
-            chars[index] = *mage;
-            index++;
+            //Character *mage = new Mage();
+            //mage->setName(name);
+            chars[count] = new Mage();
         }
         else if (charOption == 3)
         {
-            Character *doctor = new Doctor();
-            doctor->setName(name);
-            chars[index] = *doctor;
-            index++;
+            //Character *doctor = new Doctor();
+            //doctor->setName(name);
+            chars[count] = new Doctor();
         }
         else
         {
             std::cout << "Invalid option. Please try again." << std:: endl;
+            return;
         }
+        chars[count]->setName(name);
+        count++;
     }
 
 }
 
 //This function displays the list of characters stored in the provided array. It sorts the characters by their level and prints their names, types, and levels to the console.  
-void viewCharacters(Character *chars)
+void viewCharacters(Character *chars[], int count)
 {
-    sortCharactersByLevel(chars, MAX);
+    sortCharactersByLevel(chars, count);
     std::cout << "List of Characters: " << std::endl;
-    for (int i = 0; i < MAX; i++)
+    for (int i = 0; i < count; i++)
     {
-        if (!chars[i].getName().empty())
+        if (chars[i] != nullptr && !chars[i]->getName().empty())
         {
-            std::cout << "Character " << i + 1 << ": " << chars[i].getName() << std::endl;
-            std::cout << "Type: " << chars[i].getCharacterType() << std::endl;
-            std::cout << "Level: " << chars[i].getLevel() << std::endl;
+            std::cout << "Character " << i + 1 << ": " << chars[i]->getName() << std::endl;
+            std::cout << "Type: " << chars[i]->getCharacterType() << std::endl;
+            std::cout << "Level: " << chars[i]->getLevel() << std::endl;
         }
+        else 
+            continue;
     }
 }
 
 //This function deletes a character from the provided array based on the user's input. It prompts the user to enter the name of the character to delete, searches for the character in the array, and resets its attributes to default values if found. If the character is not found, it displays an appropriate message.
-void deleteCharacter(Character *chars)
+void deleteCharacter(Character *chars[], int &count)
 {
     std::cout << "Enter the name of the character to delete: ";
     std::string name;
     std::cin.ignore(); // Clear the input buffer
     std::getline(std::cin, name);
-    findCharacter(chars, name);
-    if (findCharacter(chars, name))
+    int charIndex = findCharacter(chars, count, name);
+    if (charIndex != -1)
     {
-        for (int i = 0; i < MAX; i++)
+        delete chars[charIndex];
+
+        for (int i = charIndex; i < count - 1; i++)
         {
-            if (chars[i].getName() == name)
-            {
-                chars[i] = Character(); // Reset the character to default values
-                std::cout << "Character " << name << " deleted successfully." << std::endl;
-                break;
-            }
+            chars[i] = chars[i+1];
         }
+        chars[count - 1] = nullptr;
+        count--;
+        std::cout << "Character deleted successfully.\n";
     }
     else
     {
         std::cout << "Character not found. Deletion failed." << std::endl;
+        return;
     }
 
 }
 
 //This function saves the current state of the game by writing character data to a file named "characters.txt". It sorts the characters by level and writes their attributes (name, type, level, health, attack power, defense, experience points, and status) to the file. If the file cannot be opened for writing, it displays an error message.
-void saveFile(Character *chars)
+void saveFile(Character *chars[], int count)
 {
     // Implement save game logic here
     // Example: Save character data to a file
-    sortCharactersByLevel(chars, MAX);
+    sortCharactersByLevel(chars, count);
     std::ofstream outFile("characters.txt");
     if (!outFile)
     {
@@ -237,19 +262,23 @@ void saveFile(Character *chars)
     }
     else
     {
-        for (int i = 0; i < MAX; i++)
+        for (int i = 0; i < count; i++)
         {
-            if (chars != nullptr && !chars[i].getName().empty())
+            if (chars[i] != nullptr)
             {
-                outFile << chars[i].getName() << std::endl;
-                outFile << chars[i].getCharacterType() << std::endl;
-                outFile << chars[i].getLevel() << std::endl;
-                outFile << chars[i].getHealth() << std::endl;
-                outFile << chars[i].getAttackPower() << std::endl;
-                outFile << chars[i].getDefense() << std::endl;
-                outFile << chars[i].getExperiencePoints() << std::endl;
-                outFile << chars[i].getStatus() << std::endl;
+                outFile << chars[i]->getName() << std::endl;
+                outFile << chars[i]->getCharacterType() << std::endl;
+                outFile << chars[i]->getLevel() << std::endl;
+                outFile << chars[i]->getHealth() << std::endl;
+                outFile << chars[i]->getAttackPower() << std::endl;
+                outFile << chars[i]->getDefense() << std::endl;
+                outFile << chars[i]->getExperiencePoints() << std::endl;
+                outFile << chars[i]->getStatus() << std::endl;
                 outFile << std::endl; // Add a blank line between characters for readability
+            }
+            else
+            {
+                continue;
             }
         }
         std::cout << "Game saved successfully." << std::endl;
@@ -258,25 +287,25 @@ void saveFile(Character *chars)
     
 }
 
-void train(Character *chars)
+void train(Character *chars[], int count)
 {
     std::cout << "Choose your character to train (Enter Character name): ";
     std::string name;
     std::cin.ignore(); // Clear the input buffer
     std::getline(std::cin, name);
-    findCharacter(chars, name);
-    if (findCharacter(chars, name))
+    int charIndex = findCharacter(chars, count, name);
+    if (charIndex != -1)
     {
-        for (int i = 0; i < MAX; i++)
-        {
-            if (chars[i].getName() == name)
-            {
-                
-                std::cout << name << " trained." << std::endl;
-                chars[i].setExperiencePoints(chars[i].getExperiencePoints() + 25);
-                levelUp(chars, i);
-            }
-        }
+        //levelUp(chars, charIndex);
+        Character *c = chars[charIndex];
+        std::cout << name << " has trained successfully." << std::endl;
+        c->setLevel(c->getLevel() + 1);
+        c->setAttackPower(c->getAttackPower() + 3);
+        c->setDefense(c->getDefense() + 2);
+
+        std::cout << "Level +1\n";
+        std::cout << "Attack +3\n";
+        std::cout << "Defense +2\n";
     }
     else
     {
@@ -284,7 +313,7 @@ void train(Character *chars)
     }
 }
 
-void battle(Character *chars)
+void battle(Character *chars[], int count)
 {
     Character *p1 = nullptr;
     Character *p2 = nullptr;
@@ -295,74 +324,86 @@ void battle(Character *chars)
     std::cout << "Choose your opponent for battle (Enter Character name): ";
     std::string opponentName;
     std::getline(std::cin, opponentName);
-    bool found = false;
-    for (int i = 0; i < MAX; i++)
+    int index1 = findCharacter(chars, count, name);
+    int index2 = findCharacter(chars, count, opponentName);
+    bool player1turn = true;
+    if (index1 != -1 && index2 != -1)
     {
-        if (chars[i].getName() == name )
+        p1 = chars[index1];
+        p2 = chars[index2];
+        while (p1->getHealth() > 0 && p2->getHealth() > 0)
         {
-            found = true;
-            std::cout << name << " is ready for battle!" << std::endl;
-
-            for (int j = 0; j < MAX; j++)
+            Character *attacker, *defender;
+            if (player1turn)
             {
-                if (chars[j].getName() == opponentName)
-                {
-                    found = true;
-                    std::cout << opponentName << " is ready for battle!" << std::endl;
-                    p1 = &chars[i];
-                    p2 = &chars[j];
-                    while(p1->getHealth() > 0 && p2->getHealth() > 0)
-                    {
-                        std::cout << "Battle between " << name << " and " << opponentName << "!" << std::endl;
-                        std::cout << name << "'s Health: " << p1->getHealth() << std::endl;
-                        std::cout << opponentName << "'s Health: " << p2->getHealth() << std::endl;
-                        std::cout << "------------------------" << std::endl;
-                        // Implement battle logic here
-                        // For example, you can call the specialSkill method of each character
-                        int damageToP2 = calculateDamage(p1, p2);
-                        p2->setHealth(p2->getHealth() - damageToP2);
-                        std::cout << name << " attacks " << opponentName << " for " << damageToP2 << " damage!" << std::endl;
-                        std::cout << opponentName << " has " << p2->getHealth() << " health remaining." << std::endl;
-                        if (p2->getHealth() <= 0)
-                        {
-                            break;
-                        }
-                        int damageToP1 = calculateDamage(p2, p1);
-                        p1->setHealth(p1->getHealth() - damageToP1);
-                        std::cout << opponentName << " attacks " << name << " for " << damageToP1 << " damage!" << std::endl;
-                        std::cout << name << " has " << p1->getHealth() << " health remaining." << std::endl;
-                    }
-                    
-                    // Implement battle logic here
-                    
-                    break;
-                }
+                attacker = p1;
+                defender = p2;
             }
-            break;
+            else 
+            {
+                attacker = p2;
+                defender = p1;
+            }
+
+            std::cout << attacker->getName() << " turn to choose ability:" << std::endl;
+            std::cout << "1. Normal Attack\n";
+            std::cout << "2. Special Skill\n";
+            std::cout << "Choice: ";
+            int choice;
+            std::cin >> choice;
+            std::cin.ignore();
+            if (choice == 2)
+            {
+                attacker->specialSkill(*defender);
+            }
+            else
+            {
+                int damage1 = calculateDamage(attacker, defender);
+                defender->setHealth(defender->getHealth() - damage1);
+                std::cout << attacker->getName() << " attacks " << defender->getName() << " for " << damage1 << " damage!\n";
+            }
+            std::cout << p1->getName() << " HP: " << p1->getHealth() << "\n";
+            std::cout << p2->getName() << " HP: " << p2->getHealth() << "\n";
+
+            player1turn = !player1turn;   // switch turns
         }
+
+        if (p2->getHealth() <= 0)
+        {
+            std::cout << p1->getName() << " has won the battle!\n";
+            p1->setExperiencePoints(p1->getExperiencePoints() + 50);
+            //p1->setStatus("Alive");
+            p2->setStatus("Defeated");
+
+            levelUp(chars, index1);
+        }
+
+        else if (p1->getHealth() <= 0)
+        {
+            std::cout << p2->getName() << " has won the battle!\n";
+            p2->setExperiencePoints(p2->getExperiencePoints() + 50);
+            //p2->setStatus("Alive");
+            p1->setStatus("Defeated");
+
+            levelUp(chars, index2);
+        }
+
     }
-    if (!found)
-    {   
-        std::cout << "Character not found." << std::endl;
-    }
-    else if (p1->getHealth() <= 0)
+    else if (index1 == -1)
     {
-        std::cout << opponentName << " has won the battle!" << std::endl;
-        p2->setExperiencePoints(p2->getExperiencePoints() + 50); // Award experience points to the winner
-        p1->setStatus("Defeated");
-        std::cout << name << " has been defeated!" << std::endl;
+        std::cout << "Player 1 not found!\n";
+        return;
     }
-    else if (p2->getHealth() <= 0)
+    else if (index2 == -1)
     {
-        std::cout << name << " has won the battle!" << std::endl;
-        p1->setExperiencePoints(p1->getExperiencePoints() + 50); // Award experience points to the winner
-        p2->setStatus("Defeated");
-        std::cout << opponentName << " has been defeated!" << std::endl;
-        
+        std::cout << "Player 2 not found!\n";
+        return;
     }
+
+    
 }
 
-void loadFile(Character *chars)
+void loadFile(Character *chars[], int &count)
 {
     // Implement load game logic here
     // Example: Load character data from a file
@@ -374,65 +415,57 @@ void loadFile(Character *chars)
     }
     else
     {
+        for (int i = 0; i < count; i++) 
+        {
+            delete chars[i];
+            chars[i] = nullptr;
+        }
         std::string name, classType;
         int level, health, attackPower, defense, experiencePoints;
         std::string status;
-        int i = 0;
-        while (i < MAX && std::getline(inFile, classType))
+        count = 0;
+        while (count < MAX && std::getline(inFile, name))
         {
-            std::getline(inFile, name);
+            if (name.empty())
+                continue;
+            
+            std::getline(inFile, classType);
             inFile >> level >> health >> attackPower >> defense >> experiencePoints;
             inFile.ignore(); // Ignore the newline character after reading integers
             std::getline(inFile, status);
             if (classType == "Knight")
             {
-                chars[i] = Knight();
+                chars[count] = new Knight();
             }
             else if (classType == "Mage")
             {
-                chars[i] = Mage();
+                chars[count] = new Mage();
             }
             else if (classType == "Doctor")
             {
-                chars[i] = Doctor();
+                chars[count] = new Doctor();
             }
             else
             {
                 std::cout << "Unknown character type in file: " << classType << std::endl;
                 continue; // Skip to the next iteration if the character type is unknown
             }
-            chars[i].setName(name);
-            chars[i].setCharacterType(classType);
-            chars[i].setLevel(level);
-            chars[i].setHealth(health);
-            chars[i].setAttackPower(attackPower);
-            chars[i].setDefense(defense);
-            chars[i].setExperiencePoints(experiencePoints);
-            chars[i].setStatus(status);
-            i++;
+            chars[count]->setName(name);
+            chars[count]->setCharacterType(classType);
+            chars[count]->setLevel(level);
+            chars[count]->setHealth(health);
+            chars[count]->setAttackPower(attackPower);
+            chars[count]->setDefense(defense);
+            chars[count]->setExperiencePoints(experiencePoints);
+            chars[count]->setStatus(status);
+            count++;
         }
         std::cout << "Game loaded successfully." << std::endl;
         inFile.close();
     }
 }
 
-
-bool findCharacter(Character *chars, const std::string &name)
-{
-    //bool found = false;
-    for (int i = 0; i < MAX; i++)
-    {
-        if (chars[i].getName() == name)
-        {
-            std::cout << "Character found: " << chars[i].getName() << std::endl;
-            return true;
-        }
-    }
-    std::cout << "Character not found." << std::endl;
-    return false;
-}
-
-void levelUp(Character *chars, int index)
+void levelUp(Character *chars[], int index)
 {
     if (index < 0 || index >= MAX)
     {
@@ -440,27 +473,26 @@ void levelUp(Character *chars, int index)
         return; // Return an error code for invalid index
     }
     //We want to level up with experience points for the character at the given index
-    int currentLevel = chars[index].getLevel();
-    int currentXP = chars[index].getExperiencePoints();
-    int currentAttackPowwer = chars[index].getAttackPower();
-    int currentDefense = chars[index].getDefense();
+    int currentLevel = chars[index]->getLevel();
+    int currentXP = chars[index]->getExperiencePoints();
+    int currentAttackPowwer = chars[index]->getAttackPower();
+    int currentDefense = chars[index]->getDefense();
 
     // Assuming that the experience points required for leveling up is 100 * currentLevel
     int xpRequired = 100 * currentLevel;
     if (currentXP >= xpRequired)
     {
-        chars[index].setLevel(currentLevel + 1);
-        chars[index].setExperiencePoints(currentXP - xpRequired); // Deduct the used experience
-        chars[index].setAttackPower(currentAttackPowwer + 3);
-        chars[index].setDefense(currentDefense + 2);
-
-        std::cout << chars[index].getName() << " has leveled up! Newlevel: " << chars[index].getLevel() << std::endl;
-        std::cout << "New Attack Power: " << chars[index].getAttackPower();
-        std::cout << "New Defense: " << chars[index].getDefense();
+        chars[index]->setLevel(currentLevel + 1);
+        chars[index]->setExperiencePoints(currentXP - xpRequired); // Deduct the used experience
+        chars[index]->setAttackPower(currentAttackPowwer + 3);
+        chars[index]->setDefense(currentDefense + 2);
+        std::cout << chars[index]->getName() << " has leveled up! Newlevel: " << chars[index]->getLevel() << std::endl;
+        std::cout << "New Attack Power: " << chars[index]->getAttackPower();
+        std::cout << "New Defense: " << chars[index]->getDefense();
     }
     else
     {
-        std::cout << chars[index].getName() << " does not have enough experience points to level up." << std::endl;
+        std::cout << chars[index]->getName() << " does not have enough experience points to level up." << std::endl;
     }
 
     //return chars[index].getLevel(); // Return the new level
@@ -484,16 +516,18 @@ int calculateDamage(Character *player1, Character *player2)
 }
 
 //This function sorts the characters in the provided array based on their level in descending order. It uses a simple bubble sort algorithm to compare the levels of characters and swap them if necessary. The sorted array allows for easier viewing and management of characters based on their levels.
-void sortCharactersByLevel(Character *chars, int size)
+void sortCharactersByLevel(Character *chars[], int size)
 {
     for (int i = 0; i < size - 1; i++)
     {
         for (int j = 0; j < size - i - 1; j++)
         {
-            if (chars[j].getLevel() < chars[j + 1].getLevel())
+            if (chars[j] == nullptr || chars[j+1] == nullptr)
+                continue;
+            if (chars[j]->getLevel() < chars[j + 1]->getLevel())
             {
                 // Swap characters
-                Character temp = chars[j];
+                Character* temp = chars[j];
                 chars[j] = chars[j + 1];
                 chars[j + 1] = temp;
             }
@@ -501,8 +535,9 @@ void sortCharactersByLevel(Character *chars, int size)
     }
 }
 
-void heal(Character *chars)
+void heal(Character *chars[], int count)
 {
+    std::cin.ignore();
     std::cout << "Choose doctor: ";
     std::string name;
     std::getline(std::cin, name);
@@ -510,30 +545,29 @@ void heal(Character *chars)
     std::cout << "Choose patient: ";
     std::string patientName;
     std::getline(std::cin, patientName);
-    bool found = false;
-    if (findCharacter(chars, name) && findCharacter(chars, patientName))
+    int doctorIndex = findCharacter(chars, MAX, name);
+    int patientIndex = findCharacter(chars, MAX, patientName);
+
+    if (doctorIndex != -1 && patientIndex != -1)
     {
-        for (int i = 0; i < MAX; i++)
+        if (chars[doctorIndex]->getCharacterType() != "Doctor") 
         {
-            if (chars[i].getName() == name && chars[i].getCharacterType() == "Doctor")
-            {
-                found = true;
-                for (int j = 0; j < MAX; j++)
-                {
-                    if (chars[j].getName() == patientName)
-                    {
-                        int newHealth = static_cast<Doctor*>(&chars[i])->Heal(chars[j]);
-                        chars[j].setHealth(newHealth);
-                        std::cout << patientName << " has been healed by " << name << "!" << std::endl;
-                        break;
-                    }
-                }
-                break;
-            }
+            std::cout << "That character is not a Doctor.\n";
+            return;
         }
+
+        Doctor* doc = static_cast<Doctor*>(chars[doctorIndex]);
+        doc->Heal(*chars[patientIndex]);   // or whatever signature you gave Heal
+        std::cout << patientName << " has been healed by " << name << "!" << std::endl;
     }
-    if (!found)
+    if (doctorIndex == -1)
     {
-        std::cout << "Character not found." << std::endl;
-    }  
+        std::cout << "Doctor not found!" << std::endl;
+        return;
+    }
+    if (patientIndex == -1)
+    {
+        std::cout << "Patient not found!" << std::endl;
+        return;
+    }
 }
