@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cstdlib>
 
+//Here are all the member functions implemented here for Mage class
 Mage::Mage()
 {
     setCharacterType("Mage");

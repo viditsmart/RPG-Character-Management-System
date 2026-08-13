@@ -1,5 +1,6 @@
 #include "Character.h"
 
+//Here are all the member functions for Character class
 Character::Character()
 {
     name = "Unknown";

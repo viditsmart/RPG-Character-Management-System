@@ -6,6 +6,8 @@
 #include <ctime>
 #include <cstdlib>
 
+//Here are all the member functions implemented for Kngiht class
+
 Knight::Knight()
 {
     // Initialize the knight's weapons

@@ -2,6 +2,7 @@
 #include <iostream>
 using namespace std;
 
+//Here are all the member functions for Weapon class implemented
 Weapon::Weapon()
 {
     weaponName = "sword";

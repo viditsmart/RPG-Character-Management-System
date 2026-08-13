@@ -3,12 +3,15 @@
 #include <string>
 using namespace std;
 
+//Weapon class
 class Weapon
 {
 private:
+//Member variables
     string weaponName;
     int damage;
 public:
+//Member functions
     Weapon();
     Weapon(string wn, int d);
     void setWeaponName(string wn);

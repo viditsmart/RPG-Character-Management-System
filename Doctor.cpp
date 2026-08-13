@@ -2,6 +2,8 @@
 #include "Doctor.h"
 #include <iostream>
 
+//Here are all the member functions implemented for Doctor class
+
 Doctor::Doctor()
 {
    setCharacterType("Doctor");

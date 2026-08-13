@@ -3,9 +3,11 @@
 
 #include "Character.h"
 
+//Doctor class
 class Doctor : public Character
 {
 public:
+//memebr functions
     Doctor();
     int Heal(Character &patient);
     void specialSkill(Character &patient) override;
