@@ -15,6 +15,7 @@ public:
     string getWeaponName();
     void setDamage(int d);
     int getDamage();
+    ~Weapon();
 };
 
 #endif
