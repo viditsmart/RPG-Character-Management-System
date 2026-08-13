@@ -276,13 +276,14 @@ void saveFile(Character *chars[], int count)
                 outFile << chars[i]->getExperiencePoints() << std::endl;
                 outFile << chars[i]->getStatus() << std::endl;
                 outFile << std::endl; // Add a blank line between characters for readability
+                std::cout << "Game saved successfully." << std::endl;
             }
             else
             {
                 continue;
             }
         }
-        std::cout << "Game saved successfully." << std::endl;
+        
         outFile.close();
     }
     
@@ -356,15 +357,21 @@ void battle(Character *chars[], int count)
             if (choice == 2)
             {
                 attacker->specialSkill(*defender);
+                std::cout << p1->getName() << " HP: " << p1->getHealth() << "\n";
+                std::cout << p2->getName() << " HP: " << p2->getHealth() << "\n";
             }
-            else
+            else if (choice == 1)
             {
                 int damage1 = calculateDamage(attacker, defender);
                 defender->setHealth(defender->getHealth() - damage1);
                 std::cout << attacker->getName() << " attacks " << defender->getName() << " for " << damage1 << " damage!\n";
+                std::cout << p1->getName() << " HP: " << p1->getHealth() << "\n";
+                std::cout << p2->getName() << " HP: " << p2->getHealth() << "\n";
             }
-            std::cout << p1->getName() << " HP: " << p1->getHealth() << "\n";
-            std::cout << p2->getName() << " HP: " << p2->getHealth() << "\n";
+            else{
+                std::cout << "Invalid choice!\n";
+            }
+            
 
             player1turn = !player1turn;   // switch turns
         }
