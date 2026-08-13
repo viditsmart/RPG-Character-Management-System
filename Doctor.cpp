@@ -18,7 +18,7 @@ int Doctor::Heal(Character &patient)
    if (patient.getStatus() == "Dead")
    {
       std::cout << patient.getName() << " is dead and cannot be healed." << std::endl;
-      return;
+      return 0;
    }
    int hp = patient.getHealth();
    hp+=30;
