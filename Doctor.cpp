@@ -15,7 +15,7 @@ Doctor::Doctor()
 
 int Doctor::Heal(Character &patient)
 {
-   if (patient.getStatus() == "Dead")
+   if (patient.getStatus() == "Defeated")
    {
       std::cout << patient.getName() << " is dead and cannot be healed." << std::endl;
       return 0;
