@@ -129,7 +129,7 @@ void displayMenu()
     std::cout << "2. View Characters" << std::endl;
     std::cout << "3. Train Character" << std::endl;
     std::cout << "4. Battle Simulation" << std::endl;
-    std::cout << "5. Heal Character" << std::endl << std::endl;
+    std::cout << "5. Heal Character" << std::endl;
     std::cout << "6. Delete Character" << std::endl;
     std::cout << "7. Save Game" << std::endl;
     std::cout << "8. Load Game" << std::endl;
