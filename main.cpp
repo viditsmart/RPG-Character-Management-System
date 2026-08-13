@@ -276,14 +276,14 @@ void saveFile(Character *chars[], int count)
                 outFile << chars[i]->getExperiencePoints() << std::endl;
                 outFile << chars[i]->getStatus() << std::endl;
                 outFile << std::endl; // Add a blank line between characters for readability
-                std::cout << "Game saved successfully." << std::endl;
+                
             }
             else
             {
                 continue;
             }
         }
-        
+        std::cout << "Game saved successfully." << std::endl;
         outFile.close();
     }
     
